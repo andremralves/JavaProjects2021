@@ -41,6 +41,7 @@ public class Main {
 
     static void menu() {
 
+        //printa o Menu Principal
         System.out.println("|~~~~~~~~~~~~~~~MENU~~~~~~~~~~~~~~~|");
         System.out.println("| 1 - Cadastro de novo cliente     |");
         System.out.println("| 2 - Busca por cliente            |");
@@ -59,11 +60,13 @@ public class Main {
         int numberOfClients, i;
         String name, adress, phone;
 
+        //Scaneia o número de clientes
         System.out.print("Digite o número de Clientes que deseja adicionar: ");
         Scanner input = new Scanner(System.in);
         numberOfClients = input.nextInt();
         input.nextLine();
 
+        //Scaneia os dados de cada cliente até "numberOfClientes"
         for(i=0; i< numberOfClients; i++) {
 
             System.out.println("| Cliente " + (i + 1) + " |");
@@ -80,6 +83,7 @@ public class Main {
     }
 
     static void showClients() {
+        //Printa todos os clientes
         System.out.println("―――――――――――――――");
         for(int i = 0; i<clients.size(); i++) {
             System.out.println("Cliente " + (i+1) + ": " + clients.get(i).name);
@@ -90,9 +94,14 @@ public class Main {
     static int findClient() {
         String clientName;
         int position = -1;
+
+        //Scaneia o nome de um cliente
         System.out.print("Escolha um Cliente: ");
         clientName = input.nextLine();
 
+        /*Percorre a lista de clientes comparando "clienteName"
+        com os nomes presentes na lista e retorna a posição do
+        nome que for encontrado. */
         for(int i = 0; i < clients.size(); i++) {
             if (Objects.equals(clientName, clients.get(i).name)) {
                 position= i;
@@ -262,7 +271,7 @@ public class Main {
     static void sellRegister() {
         int numMenu = 0, amount, selectedClient, selectedProduct, newInventory;
 
-
+        //printa os clientes e recebe a posição de um cliente
         showClients();
         selectedClient = findClient();
 
@@ -271,6 +280,7 @@ public class Main {
 
         } else {
             do {
+                //printa os produtos e recebe a posição de um produto
                 showProducts();
                 selectedProduct = findProduct();
 
@@ -278,11 +288,22 @@ public class Main {
                     System.out.println("Produto não encontrado!");
 
                 } else {
-                    System.out.println("Digite a quantidade à ser vendida: ");
+                    //Recebe a quantidade à ser vendida e depois subtrai ela do
+                    //estoque até o estoque chegar em 0
+                    //Se o usuário quiser, pode continuar o processo de venda
+                    System.out.print("Digite a quantidade à ser vendida: ");
                     amount = input.nextInt();
 
                     newInventory = Integer.parseInt(products.get(selectedProduct).inventory) - amount;
-                    products.get(selectedProduct).inventory = String.valueOf(newInventory);
+
+                    if(newInventory < 0) {
+                        System.out.println("Você tentou vender o produto além do estoque, apenas as vendas possíveis foram realizadas.");
+                        products.get(selectedProduct).inventory = "0";
+                    } else {
+                        products.get(selectedProduct).inventory = String.valueOf(newInventory);
+                        System.out.println("Venda realizada com sucesso!");
+                    }
+                    System.out.println("Estoque: " + products.get(selectedProduct).inventory);
 
                     System.out.println("Deseja continuar cadastrando vendas para esse cliente?");
                     System.out.println("1 - SIM");
@@ -297,6 +318,7 @@ public class Main {
     static void showInventory() {
         int numMenu = 0;
 
+        //printa o nome do produto e a quantidade em estoque
         for(int i = 0; i<products.size(); i++) {
             System.out.print("Produto " + (i+1) + ": " + products.get(i).name + " | ");
             System.out.println("Estoque: " + products.get(i).inventory);
